@@ -1,0 +1,2182 @@
+<?php
+/*
+SVN:
+http://trac.2c-studio.com/browser/wordpress/reshma_chamberlin/integrity-first/themes/vonk/lib/FNMFormat.php
+Sample Form:
+https://secure-1003.com/bbghomeloans.com/login.php
+Documentation:
+( password is: ITv3.2Docs )
+http://twist.2c-studio.com/hb-mirrored-files/2012/08/21/fanniemaeformat.zip
+types - text|select|zip|state|radio|date|time|year|email|radio_block|mixed_block
+radio_block:=https://secure-1003.com/bbghomeloans.com/11-declarations.php
+mixed_block:=https://secure-1003.com/bbghomeloans.com/12-government.php
+time:=months+years
+*/
+FNM_Format_MG::populate_years();
+class FNM_Format_MG {
+    static $streams = array (
+        'EH' => array(
+            'name' => 'EH',
+            'length' => 54,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => 'EH ',
+                ),
+                '020' => array(
+                    'length' => 6,
+                    'format' => '%6.6s',
+                 'data_keys' => array('institution_id'),
+                    'title' => 'Institution ID',
+                    'type' => 'text'
+                ),
+                '030' => array(
+                    'length' => 25,
+                    'format' => '%-25.25s',
+                    'data_keys' => array('institution_name'),
+                    'title' => 'Institution Name',
+                    'type' => 'text'
+                ),
+                '040' => array(
+                    'length' => 11,
+                    'format' => '%11.11s',
+                    'data_keys' => array('date'),
+                    'title' => 'Date',
+                    'type' => 'date'
+                ),
+                '050' => array(
+                    'length' => 9,
+                    'format' => '%9.9s',
+                    'data_keys' => array('envelope_control_number'),
+                    'title' => 'Envelope Control Number',
+                    'type' => 'text'
+                )
+            )
+        ),
+        'TH' => array(
+            'name' => 'TH',
+            'length' => 23,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => 'TH ',
+                ),
+                '020' => array(
+                    'length' => 11,
+                    'format' => '%11.11s',
+                    'data_keys' => array('transaction_id'),
+                    'title' => 'Transaction ID',
+                    'type' => 'text'
+                ),
+                '030' => array(
+                    'length' => 9,
+                    'format' => '%9.9s',
+                    'data_keys' => array('transaction_control_number'),
+                    'title' => 'Transaction Control Number',
+                    'type' => 'text'
+                )
+            )
+        ),
+        'TPI' => array(
+            'name' => 'TPI',
+            'length' => 41,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => 'TPI',
+                ),
+                '020' => array(
+                    'length' => 5,
+                    'format' => '%5.5s',
+                    'data_keys' => array('version_id'),
+                    'title' => 'Version ID',
+                    'type' => 'text'
+                ),
+                '030' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('identifier_type_code'),
+                    'title' => 'Identifier Type Code',
+                    'type' => 'text'
+                ),
+                '040' => array(
+                    'length' => 30,
+                    'format' => '%30.30s',
+                    'data_keys' => array('identifier_type_code')
+                ),
+                '050' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('import_action_indicator')
+                )
+            )
+        ),
+        '000' => array(
+            'name' => '000',
+            'length' => 12,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => '000',
+                ),
+                '020' => array(
+                    'length' => 3,
+                    'format' => '%-3.3s',
+                    'data_keys' => array('file_type')
+                ),
+                '030' => array(
+                    'length' => 4,
+                    'format' => '%4.4s',
+                    'data_keys' => array('file_version_id')
+                ),
+                '040' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('export_version_indicator')
+                )
+            )
+        ),
+        '00A' => array(
+            'name' => '00A',
+            'length' => 5,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => '00A',
+                ),
+                '020' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('income_of_other_as_basis')
+                ),
+                '030' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('spouse_income_not_as_basis')
+                )
+            )
+        ),
+        '01A' => array(
+            'name' => '01A',
+            'length' => 317,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => '01A',
+                ),
+                '020' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('mortgage_applied_for'),
+                    'title' => 'Mortgage Applied for',
+                    'type' => 'select',
+                    'options' => array(
+                        '01' => 'Conventional',
+                        '02' => 'VA',
+                        '03' => 'FHA',
+                        '04' => 'USDA / Rural Housing Service',
+                        '07' => 'Other',
+                    )
+                ),
+                '030' => array(
+                    'length' => 80,
+                    'format' => '%80.80s',
+                    'data_keys' => array('mortgage_applied_for_other'),
+                    'title' => 'If type is other(above) explain',
+                    'type' => 'text'
+                ),
+                '040' => array(
+                    'length' => 30,
+                    'format' => '%80.80s',
+                    'data_keys' => array('agency_case_number'),
+                ),
+                '050' => array(
+                    'length' => 15,
+                    'format' => '%-15.15s',
+                    'data_keys' => array('case_number')
+                ),
+                '060' => array(
+                    'length' => 15,
+                    'format' => '%15.2f',
+                    'data_keys' => array('loan_amount'),
+                    'title' => 'Loan Amount',
+                    'type' => 'text',
+                ),
+                '070' => array(
+                    'length' => 7,
+                    'format' => '0000000',
+                    'data_keys' => array('interest_rate'),
+                    'title' => 'Desired interest rate',
+                    'type' => 'text'
+                ),
+                '080' => array(
+                    'length' => 3,
+                    'format' => '%3.3s',
+                    'data_keys' => array('num_of_months'),
+                    'title' => 'Loan term',
+                    'type' => 'select',
+                    'options' => array(
+                        '360' => '30 years',
+                        '300' => '25 years',
+                        '240' => '20 years',
+                        '180' => '15 years',
+                        '120' => '10 years',
+                        '0' => 'Other',
+                    )
+                ),
+                '090' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('amortization_type'),
+                    'title' => 'Loan Type',
+                    'type' => 'select',
+                    'options' => array(
+                        '01' => 'Adjustable Rate',
+                        '05' => 'Fixed Rate',
+                        '13' => 'Other',
+                    )
+                ),
+                '100' => array(
+                    'length' => 80,
+                    'format' => '%-80.80s',
+                    'data_keys' => array('amortization_type_other'),
+                    'title' => 'If type is other(above) explain',
+                    'type' => 'text'
+                ),
+                '110' => array(
+                    'length' => 80,
+                    'format' => '%80.80s',
+                    'data_keys' => array('arm_textual')
+                )
+            )
+        ),
+        '02A' => array(
+            'name' => '02A',
+            'group_title' => 'Property Information',
+            'length' => 188,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => '02A',
+                ),
+                '020' => array(
+                    'length' => 50,
+                    'format' => '%-50.50s',
+                    'data_keys' => array('property_street_address'),
+                    'title' => 'Address',
+                    'type' => 'text'
+                ),
+                '030' => array(
+                    'length' => 35,
+                    'format' => '%-35.35s',
+                    'data_keys' => array('property_city'),
+                    'title' => 'City',
+                    'type' => 'text'
+                ),
+                '040' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('property_state'),
+                    'title' => 'State',
+                    'type' => 'state'
+                ),
+                '050' => array(
+                    'length' => 5,
+                    'format' => '%5.5s',
+                    'data_keys' => array('property_zip'),
+                    'title' => 'Zip',
+                    'type' => 'zip'
+                ),
+                '060' => array(
+                    'length' => 4,
+                    'format' => '%4.4s',
+                    'data_keys' => array('property_zip_plus'),
+                ),
+                '070' => array(
+                    'length' => 3,
+                    'format' => '%-3.3s',
+                    'data_keys' => array('num_of_units'),
+                    'title' => '# of Units at Property',
+                    'type' => 'text'
+                ),
+                '080' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('dec_of_subject_code'),
+                ),
+                '090' => array(
+                    'length' => 80,
+                    'format' => '%-80.80s',
+                    'data_keys' => array('dec_of_subject_text'),
+                    'title' => 'Legal Description',
+                    'type' => 'text',
+                    'default_value' => 'See title report'
+                ),
+                '100' => array(
+                    'length' => 4,
+                    'format' => '%4.4s',
+                    'data_keys' => array('year_built'),
+                    'title' => 'Year Built',
+                    'type' => 'year'
+                )
+            )
+        ),
+        '02B' => array(
+            'name' => '02B',
+            'group_title' => 'Purpose of Loan',
+            'length' => 157,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => '02B',
+                ),
+                '020' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('reserved_for_future')
+                ),
+                '030' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('purpose_of_loan'),
+                    'title' => 'Purpose of Loan',
+                    'type' => 'radio',
+                    'radio_type' => 'container',
+                    'options' => array(
+                        '16' => 'Purchase',
+                        '05' => 'Refinance',
+                        '04' => 'Construction',
+                        '13' => 'Construction/Permanent',
+                        '15' => 'Other'
+                    )
+                ),
+                '040' => array(
+                    'length' => 80,
+                    'format' => '%80.80s',
+                    'data_keys' => array('purpose_of_loan_other'),
+                    'title' => 'Please explain',
+                    'type' => 'text'
+                ),
+                '050' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('property_will_be'),
+                    'title' => 'Residence Type',
+                    'type' => 'select',
+                    'options' => array(
+                        '1' => 'Primary Residence',
+                        '2' => 'Secondary Residence',
+                        'D' => 'Investment Property'
+                    )
+                ),
+                '060' => array(
+                    'length' => 60,
+                    'format' => '%60.60s',
+                    'data_keys' => array('title_held_manner'),
+                    'title' => 'Manner title held in',
+                    'type' => 'select',
+                    'option_keys' => 'values',
+                    'options' => array(
+                        'Joint Tenancy',
+                        'JWROS',
+                        'Periodic Tenancy',
+                        'Single',
+                        'Tenancy at Will',
+                        'Tenancy for Life',
+                        'Tenancy for Years',
+                        'Tenancy in Common',
+                        'Tenants by the Entirety',
+                        'Tenants in Severalty',
+                        'To Be Determined',
+                    )
+                ),
+                '070' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('estate_held_in'),
+                    'title' => 'Estate Will Be Held In',
+                    'type' => 'select',
+                    'options' => array(
+                        '1' => 'Fee Simple',
+                        '2' => 'Leasehold'
+                    )
+                ),
+                '080' => array(
+                    'length' => 8,
+                    'format' => '%8.8s',
+                    'data_keys' => array('leasehold_expiration_date')
+                )
+            )
+        ),
+        '02D' => array(
+            'name' => '02D',
+            'group_title' => 'Construction or Refinance Data',
+            'length' => 165,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => '02D',
+                ),
+                '020' => array(
+                    'length' => 4,
+                    'format' => '%4.4d',
+                    'data_keys' => array( 'year_acquired' ),
+                    'title' => 'Year Acquired',
+                    'type' => 'text'
+                ),
+                '030' => array(
+                    'length' => 15,
+                    'format' => '%15.15s',
+                    'data_keys' => array( 'original_cost' ),
+                    'title' => 'Original Cost',
+                    'type' => 'text'
+                ),
+                '040' => array(
+                    'length' => 15,
+                    'format' => '%15.15s',
+                    'data_keys' => array( 'amount_existing_liens' ),
+                    'title' => 'Amount Existing Liens',
+                    'type' => 'text'
+                ),
+                '050' => array(
+                    'length' => 15,
+                    'format' => '%15.15s',
+                    'data_keys' => array( 'present_value_of_lot' ),
+                    'title' => 'Present Value of Lot',
+                    'type' => 'text'
+                ),
+                '060' => array(
+                    'length' => 15,
+                    'format' => '%15.15s',
+                    'data_keys' => array( 'cost_of_improvements' ),
+                    'title' => 'Cost of Improvements',
+                    'type' => 'text'
+                ),
+                '070' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array( 'purpose_of_refinance' ),
+                    'title' => 'Purpose of Refinance',
+                    'type' => 'select',
+                    'options' => array(
+                        'F1' => 'No Cash Out',
+                        '01' => 'Cash-Out/Other',
+                        '04' => 'Cash-Out/Home Improvement',
+                        '11' => 'Cash-Out/Debt Consolidation',
+                        '13' => 'Limited Cash-Out'
+                    )
+                ),
+                '080' => array(
+                    'length' => 80,
+                    'format' => '%80.80s',
+                    'data_keys' => array( 'describe_improvements' ),
+                    'title' => 'Describe Improvements',
+                    'type' => 'text'
+                ),
+                '090' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array( 'describe_improvements_made' ),
+                    'title' => 'Describe Improvements Made/To be Made',
+                    'type' => 'select',
+                    'options' => array(
+                        'Y' => 'Made',
+                        'N' => 'To be made',
+                        'U' => 'Unknown'
+                    )
+                ),
+                '100' => array(
+                    'length' => 15,
+                    'format' => '%15.15s',
+                    'data_keys' => array( 'improvements_cost' ),
+                    'title' => 'Improvements Costs',
+                    'type' => 'text'
+                ),
+            )
+        ),
+        '02E' => array(
+            'type' => 'multiple',
+            'group_title' => 'Down Payment',
+            'multiple_required' => 'down_payment_type_code',
+            'name' => '02E',
+            'length' => 100,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => '02E',
+                ),
+                '020' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('down_payment_type_code'),
+                    'title' => 'Down Payment source settlement changes',
+                    'type' => 'select',
+                    'options' => array(
+                        'F1' => 'Checking/Savings',
+                        'F2' => 'Deposit on Sales Contract',
+                        'F3' => 'Equity Sold on Property',
+                        '03' => 'Equity Pending from Sale',
+                        'F4' => 'Equity Pending from Subject Property',
+                        '04' => 'Gift Funds',
+                        'F5' => 'Stocks and bonds',
+                        '10' => 'Lot Equity',
+                        '09' => 'Bridge Loan',
+                        '01' => 'Unsecured Borrowed Funds',
+                        'F6' => 'Trust Funds',
+                        'F7' => 'Retirement Funds',
+                        '11' => 'Rent with option to purchase',
+                        'F8' => 'Life insurance cash value',
+                        '14' => 'Sale of Chattel',
+                        '07' => 'Trade Equity',
+                        '06' => 'Sweat Equity',
+                        '02' => 'Cash on Hand',
+                        '13' => 'Other',
+                        '28' => 'Secured Borrowed Funds',
+                        'H0' => 'Gift – Source N/A',
+                        'H1' => 'Gift – Source Relative',
+                        'H3' => 'Gift – Source Government Assistance',
+                        'H6' => 'Gift – Source Employer',
+                        'H4' => 'Gift – Source Nonprofit/Religious/Community – Seller Funded',
+                        'H5' => 'Gift – Source Nonprofit/Religious/Community – Non-Seller Funded',
+                    )
+                ),
+                '030' => array(
+                    'length' => 15,
+                    'format' => '%15.2f',
+                    'data_keys' => array('down_payment_amount')
+                ),
+                '030' => array(
+                    'length' => 80,
+                    'format' => '%-80.80s',
+                    'data_keys' => array('down_payment_explanation')
+                )
+            )
+        ),
+        '03A' => array(
+            'type' => 'per_applicant',
+            'group_title' => 'Applicants Data',
+            'multiple_required' => 'applicant_indicator',
+            'name' => '03A',
+            'length' => 239,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => '03A',
+                ),
+                '020' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('applicant_indicator')
+                ),
+                '030' => array(
+                    'length' => 9,
+                    'format' => '%9.9s',
+                    'data_keys' => array('applicant_ssn'),
+                    'title' => 'Social Security Number',
+                    'type' => 'ssn_split'
+                ),
+                '040' => array(
+                    'length' => 35,
+                    'format' => '%-35.35s',
+                    'data_keys' => array('applicant_first_name'),
+                    'title' => 'First Name',
+                    'type' => 'text',
+                    'required' => true
+                ),
+                '050' => array(
+                    'length' => 35,
+                    'format' => '%-35.35s',
+                    'data_keys' => array('applicant_middle_name'),
+                    'title' => 'Middle Name',
+                    'type' => 'text',
+                ),
+                '060' => array(
+                    'length' => 35,
+                    'format' => '%-35.35s',
+                    'data_keys' => array('applicant_last_name'),
+                    'title' => 'Last Name',
+                    'type' => 'text',
+                    'required' => true
+                ),
+                '070' => array(
+                    'length' => 4,
+                    'format' => '%4.4s',
+                    'data_keys' => array('applicant_generation'),
+                    'title' => 'Suffix',
+                    'type' => 'select',
+                    'options' => array(
+                        '' => 'N/A',
+                        'jr' => 'Jr.',
+                        'sr' => 'Sr.',
+                        'second' => 'II',
+                        'third' => 'III',
+                        'fourth' => 'IIII',
+                    ),
+                ),
+                '080' => array(
+                    'length' => 10,
+                    'format' => '%10.10s',
+                    'data_keys' => array('home_phone'),
+                    'title' => 'Home Phone',
+                    'type' => 'phone',
+                    'required' => true
+                ),
+                '090' => array(
+                    'length' => 3,
+                    'format' => '%-3.3s',
+                    'data_keys' => array('age'),
+                    'title' => 'Age',
+                    'type' => 'text',
+                ),
+                '100' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('years_school'),
+                    'title' => 'Years in school',
+                    'type' => 'text',
+                ),
+                '110' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('marital_status'),
+                    'title' => 'Marital Status',
+                    'type' => 'select',
+                    'options' => array(
+                        'M' => 'Married',
+                        'S' => 'Separated',
+                        'U' => 'Unmarried',
+                    ),
+                ),
+                '120' => array(
+                    'length' => 2,
+                    'format' => '%-2.2d',
+                    'data_keys' => array('dependents'),
+                    'title' => '# of Dependents',
+                    'type' => 'text',
+                    'help_text' => 'not listed by co-borrower'
+                ),
+                '130' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'default_value' => 'N',
+                    'data_keys' => array('completed_jointly'),
+                    'title' => 'Check if there is a Co-Borrower or No Co-Borrower',
+                    'type' => 'radio',
+                    'options' => array(
+                        'Y' => 'Co-Borrower',
+                        'N' => 'No Co-Borrower',
+                    ),
+                ),
+                '140' => array(
+                    'length' => 9,
+                    'format' => '%9.9s',
+                    'data_keys' => array('cross_reference_number'),
+                    'title' => 'Social Security Number',
+                    'type' => 'text'
+                ),
+                '150' => array(
+                    'length' => 8,
+                    'format' => '%8.8s',
+                    'data_keys' => array('date_of_birth'),
+                    'title' => 'DOB (mm/dd/yyyy)',
+                    'type' => 'date_split'
+                ),
+                '160' => array(
+                    'length' => 80,
+                    'format' => '%80.80s',
+                    'data_keys' => array('email_address'),
+                    'title' => 'Email Address',
+                    'type' => 'text'
+                )
+            )
+        ),
+        '03B' => array(
+            'type' => 'per_applicant',
+            'group_title' => 'Dependents Age',
+            'multiple_required' => 'dependents_age',
+            'name' => '03B',
+            'length' => 21,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => '03B',
+                ),
+                '020' => array(
+                    'length' => 9,
+                    'format' => '%9.9s',
+                    'data_keys' => array('applicant_ssn'),
+                    'title' => 'Social Security Number',
+                    'type' => 'ssn_split'
+                ),
+                '030' => array(
+                    'length' => 10,
+                    'format' => '%-3.3d',
+                    'data_keys' => array('dependents_age'),
+                    'title' => 'Ages of Dependents',
+                    'type' => 'text',
+                    'help_text' => 'separated by commas'
+                )
+            )
+        ),
+        '03C' => array(
+            'type' => 'multiple',
+            'group_title' => 'Applicants Address',
+            'multiple_required' => 'residence_city',
+            'name' => '03C',
+            //'hold_ssn' => 'fourth',
+            'length' => 165,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => '03C',
+                ),
+                '020' => array(
+                    'length' => 9,
+                    'format' => '%9.9s',
+                    'data_keys' => array('applicant_ssn'),
+                    'title' => 'Social Security Number',
+                    'type' => 'ssn_split'
+                ),
+                '030' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('present_or_former_address'),
+                    'title' => 'Address Type',
+                    'type' => 'select',
+                    'options' => array(
+                        'F4' => 'Former Residence',
+                        'ZG' => 'Present Address',
+                        'BH' => 'Mailing Address'
+                    )
+                ),
+                '040' => array(
+                    'length' => 50,
+                    'format' => '%-50.50s',
+                    'data_keys' => array('residence_street_address'),
+                    'title' => 'Address',
+                    'type' => 'text',
+                    'required' => true,
+                    'required_multi_key' => '0'
+                ),
+                '050' => array(
+                    'length' => 35,
+                    'format' => '%-35.35s',
+                    'data_keys' => array('residence_city'),
+                    'title' => 'City',
+                    'type' => 'text'
+                ),
+                '060' => array(
+                    'length' => 2,
+                    'format' => '%-35.35s',
+                    'data_keys' => array('residence_state'),
+                    'title' => 'State',
+                    'type' => 'text'
+                ),
+                '070' => array(
+                    'length' => 5,
+                    'format' => '%5.5s',
+                    'data_keys' => array('residence_zip'),
+                    'title' => 'Zip',
+                    'type' => 'text'
+                ),
+                '080' => array(
+                    'length' => 4,
+                    'format' => '%4.4s',
+                    'data_keys' => array('residence_zip_plus'),
+                ),
+                '090' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('residence_rent_type'),
+                    'title' => 'Rent or Own',
+                    'type' => 'select',
+                    'options' => array(
+                        'X' => 'Living Rent Free',
+                        'R' => 'Rent',
+                        'O' => 'Own'
+                    )
+                ),
+                '100' => array(
+                    'length' => 2,
+                    'format' => '%-2.2s',
+                    'data_keys' => array('residence_num_years'),
+                    'title' => 'Yrs at Address',
+                    'type' => 'text'
+                ),
+                '110' => array(
+                    'length' => 2,
+                    'format' => '%-2.2s',
+                    'data_keys' => array('residence_num_months')
+                ),
+                '120' => array(
+                    'length' => 50,
+                    'format' => '%50.50s',
+                    'data_keys' => array('residence_country')
+                )
+            )
+        ),
+        '04A' => array(
+            'type' => 'multiple',
+            'group_title' => 'Primary Current Employer',
+            'multiple_required' => 'employer_name',
+            'name' => '04A',
+            'length' => 239,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => '04A',
+                ),
+                '020' => array(
+                    'length' => 9,
+                    'format' => '%9.9s',
+                    'data_keys' => array('applicant_ssn'),
+                    'title' => 'Social Security Number',
+                    'type' => 'ssn_split'
+                ),
+                '030' => array(
+                    'length' => 35,
+                    'format' => '%-35.35s',
+                    'data_keys' => array('employer_name'),
+                    'title' => 'Employer Name',
+                    'type' => 'text'
+                ),
+                '040' => array(
+                    'length' => 35,
+                    'format' => '%-35.35s',
+                    'data_keys' => array('employer_street'),
+                    'title' => 'Employer Address',
+                    'type' => 'text'
+                ),
+                '050' => array(
+                    'length' => 35,
+                    'format' => '%-35.35s',
+                    'data_keys' => array('employer_city'),
+                    'title' => 'Employer City',
+                    'type' => 'text'
+                ),
+                '060' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('employer_state'),
+                    'title' => 'Employer State',
+                    'type' => 'state'
+                ),
+                '070' => array(
+                    'length' => 5,
+                    'format' => '%5.5s',
+                    'data_keys' => array('employer_zip'),
+                    'title' => 'Employer Zip',
+                    'type' => 'zip'
+                ),
+                '080' => array(
+                    'length' => 4,
+                    'format' => '%4.4s',
+                    'data_keys' => array('employer_zip_plus'),
+                ),
+                '090' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('self_employed'),
+                    'title' => 'Self-employed?',
+                    'type' => 'radio',
+                    'radio_type' => 'choice',
+                    'options' => array(
+                        'Y' => 'Yes',
+                        'N' => 'No'
+                    )
+                ),
+                '100' => array(
+                    'length' => 2,
+                    'format' => '%-2.2s',
+                    'data_keys' => array('years_on_this_job'),
+                    'title' => 'Time on Job (years/months)',
+                    'type' => 'text'
+                ),
+                '110' => array(
+                    'length' => 2,
+                    'format' => '%-2.2s',
+                    'data_keys' => array('months_on_this_job'),
+                    'title' => 'Time on Job (years/months)',
+                    'type' => 'text'
+                ),
+                '120' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('years_in_this_profession'),
+                    'title' => 'Yrs of this Profession',
+                    'type' => 'date'
+                ),
+                '130' => array(
+                    'length' => 25,
+                    'format' => '%-25.25s',
+                    'data_keys' => array('position'),
+                    'title' => 'Position',
+                    'type' => 'text'
+                ),
+                '140' => array(
+                    'length' => 10,
+                    'format' => '%10.10s',
+                    'data_keys' => array('business_phone'),
+                    'title' => 'Business Phone',
+                    'type' => 'phone'
+                )
+            )
+        ),
+        '04B' => array(
+            'type' => 'multiple',
+            'group_title' => 'Secondary/Previous Employer',
+            'multiple_required' => 'applicant_ssn',
+            'admin_required' => 'applicant_ssn',
+            'hold_ssn' => '0',
+            'name' => '04B',
+            'length' => 196,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => '04B',
+                ),
+                '020' => array(
+                    'length' => 9,
+                    'format' => '%9.9s',
+                    'data_keys' => array('applicant_ssn'),
+                    'title' => 'Social Security Number',
+                    'type' => 'ssn_split'
+                ),
+                '030' => array(
+                    'length' => 35,
+                    'format' => '%-35.35s',
+                    'data_keys' => array('employer_sp_name'),
+                    'title' => 'Employer Name',
+                    'type' => 'text'
+                ),
+                '040' => array(
+                    'length' => 35,
+                    'format' => '%-35.35s',
+                    'data_keys' => array('employer_sp_street'),
+                    'title' => 'Employer Address',
+                    'type' => 'text'
+                ),
+                '050' => array(
+                    'length' => 35,
+                    'format' => '%-35.35s',
+                    'data_keys' => array('employer_sp_city'),
+                    'title' => 'Employer City',
+                    'type' => 'text'
+                ),
+                '060' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('employer_sp_state'),
+                    'title' => 'Employer State',
+                    'type' => 'state'
+                ),
+                '070' => array(
+                    'length' => 5,
+                    'format' => '%5.5s',
+                    'data_keys' => array('employer_sp_zip'),
+                    'title' => 'Employer Zip',
+                    'type' => 'zip'
+                ),
+                '080' => array(
+                    'length' => 4,
+                    'format' => '%4.4s',
+                    'data_keys' => array('employer_sp_zip_plus'),
+                ),
+                '090' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('self_sp_employed'),
+                    'title' => 'Self-employed?',
+                    'type' => 'radio',
+                    'radio_type' => 'choice',
+                    'options' => array(
+                        'Y' => 'Yes',
+                        'N' => 'No'
+                    )
+                ),
+                '100' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('current_employment_flag'),
+                    'title' => 'Current or Previous Employment',
+                    'type' => 'select',
+                    'options' => array(
+                        'Y' => 'Current Employment',
+                        'N' => 'Previous Employment'
+                    )
+                ),
+                '110' => array(
+                    'length' => 8,
+                    'format' => '%8.8s',
+                    'data_keys' => array('employment_from_date'),
+                    'title' => 'Start Date(mm/dd/yy)',
+                    'type' => 'date'
+                ),
+                '120' => array(
+                    'length' => 8,
+                    'format' => '%8.8s',
+                    'data_keys' => array('employment_to_date'),
+                    'title' => 'End Date(mm/dd/yy)',
+                    'type' => 'date'
+                ),
+                '130' => array(
+                    'length' => 15,
+                    'format' => '%15.2f',
+                    'data_keys' => array('employment_monthly_income'),
+                    'title' => 'Monthly Income',
+                    'type' => 'date'
+                ),
+                '140' => array(
+                    'length' => 25,
+                    'format' => '%-25.25s',
+                    'data_keys' => array('sp_position'),
+                    'title' => 'Position',
+                    'type' => 'text'
+                ),
+                '150' => array(
+                    'length' => 10,
+                    'format' => '%10.10s',
+                    'data_keys' => array('sp_business_phone'),
+                    'title' => 'Business Phone',
+                    'type' => 'phone'
+                )
+            )
+        ),
+        '05I' => array(
+            'type' => 'multiple',
+            'group_title' => 'Income',
+            'multiple_required' => 'income_amount',
+            'multiple_key' => '030',
+            //'hold_ssn' => '0',
+            'name' => '05I',
+            'length' => 196,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => '05I',
+                ),
+                '020' => array(
+                    'length' => 9,
+                    'format' => '%9.9s',
+                    'data_keys' => array('applicant_ssn'),
+                    'title' => 'Social Security Number',
+                    'type' => 'ssn_split'
+                ),
+                '030' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('income_type_code'),
+                    'title' => 'Income Type',
+                    'type' => 'select',
+                    'options' => array(
+                        'F1' => 'Military Base Pay',
+                        '07' => 'Military Rations Allowance',
+                        'F2' => 'Military Flight Pay',
+                        'F3' => 'Military Hazard Pay',
+                        '02' => 'Military Clothes Allowance',
+                        '04' => 'Military Quarters Allowance',
+                        '03' => 'Military Prop Pay',
+                        'F4' => 'Military Overseas Pay',
+                        'F5' => 'Military Combat Pay',
+                        'F6' => 'Military Variable Housing Allowance',
+                        'F7' => 'Alimony/Child Support Income',
+                        'F8' => 'Notes Receivable/Installment',
+                        '41' => 'Pension/Retirement Income',
+                        '42' => 'Social Security/Disability Income',
+                        '30' => 'Real Estate/Mortgage Differential',
+                        'F9' => 'Trust Income',
+                        'M1' => 'Unemployment/Public Assistance',
+                        'M2' => 'Automobile/Expense Account Income',
+                        'M3' => 'Foster Care',
+                        'M4' => 'VA Benefits (non-education)',
+                        '45' => 'Other Income',
+                        '20' => 'Base Monthly Income',
+                        '09' => 'Overtime Monthly Income',
+                        '08' => 'Bonuses Monthly Income',
+                        '10' => 'Commissions Monthly Income',
+                        '17' => 'Dividends/Interest Monthly Income',
+                        'SI' => 'Subject Property Net Cash Flow',
+                        '33' => 'Net Rental Monthly Income ',
+                        'BI' => 'Boarder Income',
+                        'MC' => 'Mortgage Credit Certificate',
+                    )
+                ),
+                '040' => array(
+                    'length' => 15,
+                    'format' => '%15.2f',
+                    'data_keys' => array('income_amount'),
+                    'type' => 'text',
+                    'title' => 'Income Amount'
+                )
+            )
+        ),
+        '06C' => array(
+            'type' => 'multiple',
+            'group_title' => 'Assets',
+            'multiple_required' => 'cash_or_market_value',
+            'name' => '06C',
+            'hold_ssn' => '0',
+            'length' => 196,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => '06C',
+                ),
+                '020' => array(
+                    'length' => 9,
+                    'format' => '%9.9s',
+                    'data_keys' => array('applicant_ssn'),
+                    'title' => 'Social Security Number',
+                    'type' => 'ssn_split'
+                ),
+                '030' => array(
+                    'length' => 3,
+                    'format' => '%-3.3s',
+                    'data_keys' => array('asset_type'),
+                    'title' => 'Account/Asset Type',
+                    'type' => 'select',
+                    'options' => array(
+                        '03' => 'Checking Account',
+                        'F1' => 'Cash Deposit on Sales Contract',
+                        'SG' => 'Savings Account',
+                        'F2' => 'Gift',
+                        '01' => 'Certificate of Deposit',
+                        'F3' => 'Money Market Fund',
+                        'F4' => 'Mutual Funds',
+                        '05' => 'Stock',
+                        '06' => 'Bond',
+                        'F5' => 'Secured Borrowed Funds',
+                        'F7' => 'Bridge Loan',
+                        '08' => 'Retirement Funds',
+                        'F8' => 'Net Worth of Business Owned',
+                        '11' => 'Trust Funds',
+                        'M1' => 'Other Non-Liquid Asset',
+                        'OL' => 'Other Liquid Asset',
+                        'NE' => 'Net Equity',
+                        'COH' => 'Cash On Hand',
+                        'GE' => 'Gift of Equity',
+                    )
+                ),
+                '040' => array(
+                    'length' => 35,
+                    'format' => '%-35.35s',
+                    'data_keys' => array('asset_institution_name'),
+                    'title' => 'Name of Financial Institution',
+                    'type' => 'text'
+                ),
+                '050' => array(
+                    'length' => 35,
+                    'format' => '%-35.35s',
+                    'data_keys' => array('depository_street_address'),
+                    'title' => 'Street',
+                    'type' => 'text'
+                ),
+                '060' => array(
+                    'length' => 35,
+                    'format' => '%-35.35s',
+                    'data_keys' => array('depository_city'),
+                    'title' => 'City',
+                    'type' => 'text'
+                ),
+                '070' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('depository_state'),
+                    'title' => 'State',
+                    'type' => 'state'
+                ),
+                '080' => array(
+                    'length' => 5,
+                    'format' => '%5.5s',
+                    'data_keys' => array('depository_zip'),
+                    'title' => 'Zip',
+                    'type' => 'zip'
+                ),
+                '090' => array(
+                    'length' => 4,
+                    'format' => '%4.4s',
+                    'data_keys' => array('depository_zip_plus'),
+                    'title' => '',
+                    'type' => 'zip'
+                ),
+                '100' => array(
+                    'length' => 30,
+                    'format' => '%-30.30s',
+                    'data_keys' => array('account_num'),
+                    'title' => 'Account #',
+                    'type' => 'text'
+                ),
+                '110' => array(
+                    'length' => 15,
+                    'format' => '%15.15s',
+                    'data_keys' => array('cash_or_market_value'),
+                    'title' => 'Cash or Market Value',
+                    'type' => 'text'
+                ),
+                '120' => array(
+                    'length' => 7,
+                    'format' => '%7.7s',
+                    'data_keys' => array('num_stock_shares'),
+                    'title' => 'Number of Shares',
+                    'type' => 'text'
+                ),
+                '130' => array(
+                    'length' => 80,
+                    'format' => '%80.80s',
+                    'data_keys' => array('asset_description')
+                ),
+                '140' => array(
+                    'length' => 1,
+                    'format' => ' '
+                ),
+                '150' => array(
+                    'length' => 2,
+                    'format' => '  '
+                )
+            )
+        ),
+        '06F' => array(
+            'type' => 'per_applicant',
+            'group_title' => 'Child Support or Alimony',
+            'multiple_required' => 'applicant_ssn',
+            'name' => '03B',
+            'length' => 21,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => '06F',
+                ),
+                '020' => array(
+                    'length' => 9,
+                    'format' => '%9.9s',
+                    'data_keys' => array('applicant_ssn'),
+                    'title' => 'Social Security Number',
+                    'type' => 'ssn_split'
+                ),
+                '030' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('child_support_alimony'),
+                    'title' => 'Child Support or Alimony',
+                    'type' => 'text'
+                ),
+                '040' => array(
+                    'length' => 10,
+                    'format' => '%-10.10d',
+                    'data_keys' => array('child_support_alimony_amount'),
+                    'title' => 'Child Support or Alimony Amount',
+                    'type' => 'text',
+                ),
+            )
+        ),
+        '06G' => array(
+            'type' => 'multiple',
+            'group_title' => 'Real Estate Owned',
+            'multiple_required' => 'estate_property_street_address',
+            'name' => '06G',
+            'hold_ssn' => '0',
+            'length' => 196,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => '06G',
+                ),
+                '020' => array(
+                    'length' => 9,
+                    'format' => '%9.9s',
+                    'data_keys' => array('applicant_ssn'),
+                    'title' => 'Social Security Number',
+                    'type' => 'ssn_split'
+                ),
+                '030' => array(
+                    'length' => 35,
+                    'format' => '%-35.35s',
+                    'data_keys' => array('estate_property_street_address'),
+                    'title' => 'Property Address',
+                    'type' => 'text'
+                ),
+                '040' => array(
+                    'length' => 35,
+                    'format' => '%-35.35s',
+                    'data_keys' => array('estate_property_city'),
+                    'title' => 'City',
+                    'type' => 'text'
+                ),
+                '050' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('estate_property_state'),
+                    'title' => 'State',
+                    'type' => 'state'
+                ),
+                '060' => array(
+                    'length' => 5,
+                    'format' => '%5.5s',
+                    'data_keys' => array('estate_property_zip'),
+                    'title' => 'Zip',
+                    'type' => 'text'
+                ),
+                '070' => array(
+                    'length' => 4,
+                    'format' => '%4.4s',
+                    'data_keys' => array('estate_property_zip_plus'),
+                    'title' => '',
+                    'type' => 'text'
+                ),
+                '080' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('estate_property_disposition'),
+                    'title' => 'Property Disposition',
+                    'type' => 'select',
+                    'options' => array(
+                        'H' => 'Retained',
+                        'R' => 'Rental',
+                        'P' => 'Pending Sale',
+                        'S' => 'Sold'
+                    )
+                ),
+                '090' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('estate_property_type'),
+                    'title' => 'Type of Property',
+                    'type' => 'select',
+                    'options' => array(
+                        '14' => 'Single Family',
+                        '04' => 'Condominium',
+                        '16' => 'Townhouse',
+                        '13' => 'Co-operative',
+                        '15' => 'Two-to-four unit property',
+                        '18' => 'Multifamily (more than 4 units)',
+                        '08' => 'Manufactured/Mobile Home',
+                        '02' => 'Commercial - Non-Residential',
+                        'F1' => 'Mixed Use - Residential',
+                        '05' => 'Farm',
+                        '03' => 'Home and Business Combined',
+                        '07' => 'Land'
+                    )
+                ),
+                '100' => array(
+                    'length' => 15,
+                    'format' => '%15.2f',
+                    'data_keys' => array('estate_market_value'),
+                    'title' => 'Present Market Value',
+                    'type' => 'text'
+                ),
+                '110' => array(
+                    'length' => 15,
+                    'format' => '%15.2f',
+                    'data_keys' => array('estate_amount_mortgages'),
+                    'title' => 'Amount of Mortgage & Leins',
+                    'type' => 'text'
+                ),
+                '120' => array(
+                    'length' => 15,
+                    'format' => '%15.2f',
+                    'data_keys' => array('estate_gross_rental_income'),
+                    'title' => 'Gross Rental Income',
+                    'type' => 'text'
+                ),
+                '130' => array(
+                    'length' => 15,
+                    'format' => '%15.2f',
+                    'data_keys' => array('estate_mortgage_payments'),
+                    'title' => 'Mortgage Payments',
+                    'type' => 'text'
+                ),
+                '140' => array(
+                    'length' => 15,
+                    'format' => '%15.2f',
+                    'data_keys' => array('estate_taxes'),
+                    'title' => 'Insurance, Maintenance, Taxes & Misc.',
+                    'type' => 'text'
+                ),
+                '150' => array(
+                    'length' => 15,
+                    'format' => '%15.2f',
+                    'data_keys' => array('estate_net_rental_income'),
+                    'title' => 'Net Rental Income',
+                    'type' => 'text'
+                ),
+                '160' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('estate_residence_indicator'),
+                    'title' => 'Primary Residence',
+                    'type' => 'radio',
+                    'radio_type' => 'choice',
+                    'radio_class' => 'radio-fitter',
+                    'options' => array(
+                        'Y' => 'Yes',
+                        'N' => 'No'
+                    )
+                ),
+                '170' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('estate_subject_property_indicator'),
+                    'title' => 'Current Subject',
+                    'type' => 'select',
+                    'options' => array(
+                        'Y' => 'Yes',
+                        'N' => 'No'
+                    )
+                ),
+                '180' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('estate_reo_asset_id')
+                ),
+                '190' => array(
+                    'length' => 15,
+                    'format' => '               ' // 15 spaces
+                )
+            )
+        ),
+        '07A' => array(
+            'name' => '07A',
+            'group_title' => 'Details of Transaction',
+            'length' => 168,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => '07A',
+                ),
+                '020' => array(
+                    'length' => 15,
+                    'format' => '%15.2f',
+                    'data_keys' => array('transaction_purchase_price'),
+                    'title' => 'Purchase price',
+                    'type' => 'text'
+                ),
+                '030' => array(
+                    'length' => 15,
+                    'format' => '%15.2f',
+                    'data_keys' => array('transaction_alterations'),
+                    'title' => 'Alterations, improvements, repairs',
+                    'type' => 'text'
+                ),
+                '040' => array(
+                    'length' => 15,
+                    'format' => '%15.2f',
+                    'data_keys' => array('transaction_land'),
+                    'title' => 'Land',
+                    'type' => 'text',
+                    'help_text' => 'if acquired separately'
+                ),
+                '050' => array(
+                    'length' => 15,
+                    'format' => '%15.2f',
+                    'data_keys' => array('transaction_refinance'),
+                    'title' => 'Refinance',
+                    'type' => 'text',
+                    'help_text' => 'incl. debts to be paid off'
+                ),
+                '060' => array(
+                    'length' => 15,
+                    'format' => '%15.2f',
+                    'data_keys' => array('transaction_estimated_repaid_items'),
+                    'title' => 'Estimated prepaid items',
+                    'type' => 'text'
+                ),
+                '070' => array(
+                    'length' => 15,
+                    'format' => '%15.2f',
+                    'data_keys' => array('transaction_estimated_closing_costs'),
+                    'title' => 'Estimated closing costs',
+                    'type' => 'text'
+                ),
+                '080' => array(
+                    'length' => 15,
+                    'format' => '%15.2f',
+                    'data_keys' => array('transaction_funding_fee'),
+                    'title' => 'PMI, MIP, Funding Fee',
+                    'type' => 'text'
+                ),
+                '090' => array(
+                    'length' => 15,
+                    'format' => '%15.2f',
+                    'data_keys' => array('transaction_discount'),
+                    'title' => 'Discount',
+                    'type' => 'text',
+                    'help_text' => 'if Borrower will pay'
+                ),
+                '100' => array(
+                    'length' => 15,
+                    'format' => '%15.2f',
+                    'data_keys' => array('transaction_subordinate_financing'),
+                    'title' => 'Subordinate financing',
+                    'type' => 'text'
+                ),
+                '110' => array(
+                    'length' => 15,
+                    'format' => '%15.2f',
+                    'data_keys' => array('transaction_costs_paid_by_seller'),
+                    'title' => 'Borrower\'s closing costs paid by Seller',
+                    'type' => 'text'
+                ),
+                '120' => array(
+                    'length' => 15,
+                    'format' => '%15.2f',
+                    'data_keys' => array('transaction_funding_fee_financed'),
+                    'title' => 'PMI, MIP, Funding Fee financed',
+                    'type' => 'text'
+                )
+            )
+        ),
+        '08A' => array(
+            'type' => 'per_applicant',
+            'group_title' => 'Declarations',
+            'multiple_required' => 'applicant_ssn',
+            'name' => '08A',
+            'length' => 28,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => '08A',
+                ),
+                '020' => array(
+                    'length' => 9,
+                    'format' => '%9.9s',
+                    'data_keys' => array('applicant_ssn'),
+                    'title' => 'Social Security Number',
+                    'type' => 'ssn_split'
+                ),
+                '030' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('declarations_outstanding_judgements'),
+                    'title' => 'Are there any outstanding judgments against you?',
+                    'type' => 'radio',
+                    'options' => array(
+                        'Y' => 'Yes',
+                        'N' => 'No',
+                    ),
+                ),
+                '040' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('declarations_bankrupt'),
+                    'title' => 'Have you been declared bankrupt within the past 7 years?',
+                    'type' => 'radio',
+                    'options' => array(
+                        'Y' => 'Yes',
+                        'N' => 'No',
+                    ),
+                ),
+                '050' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('declarations_property_foreclosed'),
+                    'title' => 'Have you had property foreclosed upon or given title or deed in lieu thereof in the last 7 years?',
+                    'type' => 'radio',
+                    'options' => array(
+                        'Y' => 'Yes',
+                        'N' => 'No',
+                    ),
+                ),
+                '060' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('declarations_party_to_a_lawsuit'),
+                    'title' => 'Are you a party to a lawsuit?',
+                    'type' => 'radio',
+                    'options' => array(
+                        'Y' => 'Yes',
+                        'N' => 'No',
+                    ),
+                ),
+                '070' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('delcarations_obligated_on_loan'),
+                    'title' => 'Have you directly or indirectly been obligated on any loan which resulted in foreclosure, transfer of title in lieu of foreclosure, or judgment? This would include such loans as home mortgage loans, SBA loans, home improvement loans, educational loans, manufactured (mobile) home loans, any mortgage, financial obligation, bond, or loan guarantee. If “Yes,” provide details, including date, name and address of Lender, FHA or VA case number, if any, and reasons for the action.',
+                    'type' => 'radio',
+                    'options' => array(
+                        'Y' => 'Yes',
+                        'N' => 'No',
+                    ),
+                ),
+                '080' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('declarations_default_on_federal_debt'),
+                    'title' => 'Are you presently delinquent or in default on any Federal debt or any other loan, mortgage, financial obligation, bond, or loan guarantee? If “Yes,” give details as described in the preceding question.',
+                    'type' => 'radio',
+                    'options' => array(
+                        'Y' => 'Yes',
+                        'N' => 'No',
+                    ),
+                ),
+                '090' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('declarations_child_support'),
+                    'title' => 'Are you obligated to pay alimony, child support, or separate maintenance?',
+                    'type' => 'radio',
+                    'options' => array(
+                        'Y' => 'Yes',
+                        'N' => 'No',
+                    ),
+                ),
+                '100' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('declarations_part_borrowed'),
+                    'title' => 'Is any part of the down payment borrowed?',
+                    'type' => 'radio',
+                    'options' => array(
+                        'Y' => 'Yes',
+                        'N' => 'No',
+                    ),
+                ),
+                '110' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('declarations_comaker_note'),
+                    'title' => 'Are you a co-maker or endorser on a note?',
+                    'type' => 'radio',
+                    'options' => array(
+                        'Y' => 'Yes',
+                        'N' => 'No',
+                    ),
+                ),
+                '120' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('declarations_us_citizen'), // !!!!!!!!!!!!,
+                    'title' => 'Are you a U.S. citizen? Are you a permanent resident alien?',
+                    'type' => 'select',
+                    'options' => array(
+                        '01' => 'US Citizen',
+                        '02' => 'Permanent Resident-Alien',
+                        '03' => 'Non-Permanent Resident-Alien',
+                    ),
+                ),
+                '130' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('declaration_intend_to_occupy'),
+                    'title' => 'Do you intend to occupy the property as your primary residence? If Yes,” complete question m below.',
+                    'type' => 'radio',
+                    'options' => array(
+                        'Y' => 'Yes',
+                        'N' => 'No',
+                    ),
+                ),
+                '140' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('declaration_ownership_interest'),
+                    'title' => 'Have you had an ownership interest in a property in the last three years? If “Yes,” complete question m below.',
+                    'type' => 'radio',
+                    'options' => array(
+                        'Y' => 'Yes',
+                        'N' => 'No',
+                    ),
+                ),
+                '150' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('declaration_type_of_property'),
+                    'title' => 'What type of property<br/>do you own?',
+                    'type' => 'select',
+                    'options' => array(
+                        '1' => 'Primary Residence',
+                        '2' => 'Secondary Residence',
+                        'D' => 'Investment Property',
+                    ),
+                ),
+                '160' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('declaration_hold_title'),
+                    'title' => 'How is the title held on your previous property?',
+                    'type' => 'select',
+                    'options' => array(
+                        '01' => 'Sole (individual)',
+                        '25' => 'Joint with spouse',
+                        '26' => 'Joint with other than spouse',
+                    ),
+                )
+            )
+        ),
+        '09A' => array(
+            'type' => 'per_applicant',
+            'group_title' => 'Acknowledgment and Agreement',
+            'multiple_required' => 'applicant_ssn',
+            'name' => '09A',
+            'length' => 20,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => '09A',
+                ),
+                '020' => array(
+                    'length' => 9,
+                    'format' => '%9.9s',
+                    'data_keys' => array('applicant_ssn'),
+                    'title' => 'Social Security Number',
+                    'type' => 'ssn_split'
+                ),
+                '030' => array(
+                    'length' => 8,
+                    'format' => '%8.8s',
+                    'data_keys' => array('agreement_signature_date')
+                )
+            )
+        ),
+        '10A' => array(
+            'type' => 'per_applicant',
+            'group_title' => 'Information for Government Monitoring Purposes',
+            'multiple_required' => 'applicant_ssn',
+            'name' => '10A',
+            'length' => 45,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => '10A',
+                ),
+                '020' => array(
+                    'length' => 9,
+                    'format' => '%9.9s',
+                    'data_keys' => array('applicant_ssn'),
+                    'title' => 'Social Security Number',
+                    'type' => 'ssn_split'
+                ),
+                '030' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('gov_furnish')
+                ),
+                '040' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('gov_ethnicity')
+                ),
+                '050' => array(
+                    'length' => 30,
+                    'format' => '%30.30s',
+                    'data_keys' => array('gov_filler')
+                ),
+                '060' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('gov_sex')
+                )
+            )
+        ),
+        // Loan originator
+        '10B' => array(
+            'name' => '10B',
+            'length' => 233,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => '10B',
+                ),
+                '020' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('info_taken_by'),
+                    'title' => 'Loan Officer',
+                    'type' => 'text'
+                ),
+                '030' => array(
+                    'length' => 60,
+                    'format' => '%-60.60s',
+                    'data_keys' => array('loan_originator_name'),
+                    'title' => 'Other',
+                    'type' => 'text'
+                ),
+            )
+        ),
+        '10R' => array(
+            'type' => 'multiple',
+            'group_title' => 'Reporting on Multiple Race per Applicant',
+            'multiple_required' => 'applicant_race',
+            'multiple_key' => '030',
+            'name' => '10R',
+            'hold_ssn' => 'every_second',
+            'length' => 14,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => '10R',
+                ),
+                '020' => array(
+                    'length' => 9,
+                    'format' => '%9.9s',
+                    'data_keys' => array('applicant_ssn'),
+                    'title' => 'Social Security Number',
+                    'type' => 'ssn_split'
+                ),
+                '030' => array(
+                    'length' => 2,
+                    'format' => '%-2.2s',
+                    'title' => 'Race',
+                    'data_keys' => array('applicant_race'),
+                    'type' => 'select',
+                    'options' => array(
+                        '1' => 'American Indian or Alaska Native',
+                        '2' => 'Asian',
+                        '3' => 'Black or African American',
+                        '4' => 'Native Hawaiian or Other Pacific Islander',
+                        '5' => 'White',
+                        '6' => 'Information not provided by applicant in mail, internet, or telephone application',
+                        '7' => 'Not applicable',
+                    )
+                )
+            )
+        ),
+        // Transitional data
+        '99B' => array(
+            'name' => '99B',
+            'length' => 145,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => '99B',
+                ),
+                '020' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('data_seller_below_financing')
+                ),
+                '030' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('data_owner_of_mortgage')
+                ),
+                '040' => array(
+                    'length' => 15,
+                    'format' => '%15.2f',
+                    'data_keys' => array('data_property_appraised_value')
+                ),
+                '050' => array(
+                    'length' => 7,
+                    'format' => '%7.3f',
+                    'data_keys' => array('data_buydown_rate')
+                ),
+                '060' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('data_actual_vs_estimated_indicator')
+                ),
+                '070' => array(
+                    'length' => 3,
+                    'format' => '%3.3s',
+                    'data_keys' => array('data_appraisal_fieldwork_ordered')
+                ),
+                '080' => array(
+                    'length' => 60,
+                    'format' => '%60.60s',
+                    'data_keys' => array('data_appraiser_name')
+                ),
+                '090' => array(
+                    'length' => 35,
+                    'format' => '%35.35s',
+                    'data_keys' => array('data_appraiser_company')
+                ),
+                '100' => array(
+                    'length' => 15,
+                    'format' => '%15.15s',
+                    'data_keys' => array('data_appraiser_license_number')
+                ),
+                '110' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('data_appraiser_license_state')
+                )
+            )
+        ),
+        'ADS' => array(
+            'type' => 'multiple',
+            'multiple_required' => 'ads_value',
+            'name' => 'ADS',
+            'length' => 88,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => 'ADS',
+                ),
+                '020' => array(
+                    'length' => 35,
+                    'format' => '%-35.35s',
+                    'data_keys' => array('ads_name')
+                ),
+                '030' => array(
+                    'length' => 50,
+                    'format' => '%-50.50s',
+                    'data_keys' => array('ads_value')
+                ),
+            )
+        ),
+        'LNC' => array(
+            'name' => 'LNC',
+            'length' => 91,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => 'LNC',
+                ),
+                '020' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('lien_type_code')
+                ),
+                '030' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('loan_doc_type')
+                ),
+                '040' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('subject_property_type')
+                ),
+                // fields 050 - 080 combined
+                '050' => array(
+                    'length' => 8,
+                    'format' => '        ' // 4x2 spaces reserved for future use
+                ),
+                '090' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('project_classification_code')
+                ),
+                '100' => array(
+                    'length' => 7,
+                    'format' => '%7.3f',
+                    'data_keys' => array('negative_amorthization_limit')
+                ),
+                '110' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('balloon_indicator')
+                ),
+                // 120 - 130 comdined
+                '120' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('  ') // 2x1 space
+                ),
+                '140' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('homebuyer_education_completion')
+                ),
+                '150' => array(
+                    'length' => 7,
+                    'format' => '%7.3f',
+                    'data_keys' => array('max_lifetime_rate_increase')
+                ),
+                '160' => array(
+                    'length' => 7,
+                    'format' => '%7.3f',
+                    'data_keys' => array('payment_adjustment_life_percent')
+                ),
+                '170' => array(
+                    'length' => 15,
+                    'format' => '%15.2f',
+                    'data_keys' => array('payment_adjustment_life_amount')
+                ),
+                '180' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('escrow_be_waived')
+                ),
+                '190' => array(
+                    'length' => 8,
+                    'format' => '%8.8s',
+                    'data_keys' => array('scheduled_loan_closing_date')
+                ),
+                '200' => array(
+                    'length' => 8,
+                    'format' => '%8.8s',
+                    'data_keys' => array('scheduled_first_payment_date')
+                ),
+                '210' => array(
+                    'length' => 7,
+                    'format' => '%7.3f',
+                    'data_keys' => array('mi_coverage_percent')
+                ),
+                '220' => array(
+                    'length' => 3,
+                    'format' => '%3.3s',
+                    'data_keys' => array('mi_insurer_code')
+                ),
+                '230' => array(
+                    'length' => 5,
+                    'format' => '%5.5s',
+                    'data_keys' => array('apr_spread')
+                ),
+                '240' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('hoepa')
+                ),
+                '250' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('preapproval')
+                )
+            )
+        ),
+        'PID' => array(
+            'name' => 'PID',
+            'length' => 53,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => 'PID',
+                ),
+                '020' => array(
+                    'length' => 30,
+                    'format' => '%30.30s',
+                    'data_keys' => array('product_description')
+                ),
+                '030' => array(
+                    'length' => 15,
+                    'format' => '%15.15s',
+                    'data_keys' => array('product_code')
+                ),
+                '040' => array(
+                    'length' => 5,
+                    'format' => '%5.5s',
+                    'data_keys' => array('product_plan_num')
+                )
+            )
+        ),
+        'PCH' => array(
+            'name' => 'PCH',
+            'length' => 13,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => 'PCH',
+                ),
+                '020' => array(
+                    'length' => 3,
+                    'format' => '%3.3s',
+                    'data_keys' => array('mortgage_term')
+                ),
+                '030' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('assumable_loan_indicator')
+                ),
+                '040' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('payment_frequency_code')
+                ),
+                '050' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('product_penalty_indicator')
+                ),
+                '060' => array(
+                    'length' => 1,
+                    'format' => '%1.1s',
+                    'data_keys' => array('prepayment_restricted_indicator')
+                ),
+                '070' => array(
+                    'length' => 2,
+                    'format' => '%2.2s',
+                    'data_keys' => array('repayment_type_code')
+                )
+            )
+        ),
+        'TT' => array(
+            'name' => 'TT',
+            'length' => 12,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => 'TT ',
+                ),
+                '020' => array(
+                    'length' => 9,
+                    'format' => '%9.9s',
+                    'data_keys' => array('transaction_control_number')
+                )
+            )
+        ),
+        'ET' => array(
+            'name' => 'ET',
+            'length' => 12,
+            'fields' => array(
+                '010' => array(
+                    'length' => 3,
+                    'format' => 'ET ',
+                ),
+                '020' => array(
+                    'length' => 9,
+                    'format' => '%9.9s',
+                    'data_keys' => array('envelope_control_number')
+                )
+            )
+        ),
+    );
+    static $states = array(
+        '' => "Select",
+        'AL' => "Alabama",
+        'AK' => "Alaska",
+        'AZ' => "Arizona",
+        'AR' => "Arkansas",
+        'CA' => "California",
+        'CO' => "Colorado",
+        'CT' => "Connecticut",
+        'DE' => "Delaware",
+        'DC' => "District Of Columbia",
+        'FL' => "Florida",
+        'GA' => "Georgia",
+        'HI' => "Hawaii",
+        'ID' => "Idaho",
+        'IL' => "Illinois",
+        'IN' => "Indiana",
+        'IA' => "Iowa",
+        'KS' => "Kansas",
+        'KY' => "Kentucky",
+        'LA' => "Louisiana",
+        'ME' => "Maine",
+        'MD' => "Maryland",
+        'MA' => "Massachusetts",
+        'MI' => "Michigan",
+        'MN' => "Minnesota",
+        'MS' => "Mississippi",
+        'MO' => "Missouri",
+        'MT' => "Montana",
+        'NE' => "Nebraska",
+        'NV' => "Nevada",
+        'NH' => "New Hampshire",
+        'NJ' => "New Jersey",
+        'NM' => "New Mexico",
+        'NY' => "New York",
+        'NC' => "North Carolina",
+        'ND' => "North Dakota",
+        'OH' => "Ohio",
+        'OK' => "Oklahoma",
+        'OR' => "Oregon",
+        'PA' => "Pennsylvania",
+        'RI' => "Rhode Island",
+        'SC' => "South Carolina",
+        'SD' => "South Dakota",
+        'TN' => "Tennessee",
+        'TX' => "Texas",
+        'UT' => "Utah",
+        'VT' => "Vermont",
+        'VA' => "Virginia",
+        'WA' => "Washington",
+        'WV' => "West Virginia",
+        'WI' => "Wisconsin",
+        'WY' => "Wyoming"
+    );
+    static $years = array();
+    static function populate_years() {
+        FNM_Format_MG::$years = range(1850, date('Y')+1);
+        array_unshift(FNM_Format_MG::$years, '');
+    }
+}
